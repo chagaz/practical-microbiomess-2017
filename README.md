@@ -95,8 +95,9 @@ Launch the interactive Python terminal with
 ```sh
   ipython2
 ```
+__Tip:__ Once you have copied code, you can paste it in the ipython terminal by simply typing `%paste`. (This command is called a "magic" in ipython, and will keep code indentation.)
 
-We're going to use a Python package called `pandas` to manipulate data. Pandas manipulates data in so-called "data frames". In your ipython terminal, type:
+We're going to use a Python package called `pandas` to manipulate data. Pandas manipulates data in so-called "data frames". In your ipython terminal, type or copy-paste:
 
 ```python
 # Load the pandas package
