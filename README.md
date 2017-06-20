@@ -362,7 +362,7 @@ __Question:__ What was the optimal value for `alpha`? How does it compare to the
 
 <details>
 <summary>Click to see answer</summary>
-<details>Answer: The optimal value for alpha is 0.01. This is less than the values we tried before. With less regularization, the model will be less sparse: more SNPs will be selected. Indeed, we now select 32 SNPs. (Your answer may be different because of randomness in the cross-validation procedure.)
+Answer: The optimal value for alpha is 0.01. This is less than the values we tried before. With less regularization, the model will be less sparse: more SNPs will be selected. Indeed, we now select 32 SNPs. (Your answer may be different because of randomness in the cross-validation procedure.)
 </details>
 
 #### Overfitting
@@ -386,18 +386,21 @@ lasso_cv.fit(X_disc, y_disc)
 __Question:__ What is now the optimized alpha value?
 
 <details>
-<summary>Click to see answer</summary>
+<summary>Click to see answer</summary><p>
+
 Answer:
 ```python
 print "Optimal alpha:", lasso_cv.alpha_
 ```
 alpha=0.02. (Your answer may be different because of randomness in the cross-validation procedure.)
-</details>
+
+</p></details>
 
 __Question:__ How many SNPs have we selected?
 
 <details>
-<summary>Click to see answer</summary>
+<summary>Click to see answer</summary><p>
+
 Answer:
 ```python
 # Indices of the SNPs with non-zero coefficients
@@ -406,11 +409,13 @@ selected_snps = np.where(lasso_cv.coef_)[0]
 print len(selected_snps), "selected SNPs"
 ```
 18 SNPs. (Your answer may be different because of randomness in the cross-validation procedure.)
-</details>
+
+</p></details>
 
 __Question:__ What percentage of the variance do we explain in the discovery set?
 <details>
-<summary>Click to see answer</summary>
+  <summary>Click to see answer</summary><p>
+
 Answer:
 ```python
 # Fit a linear model to the significant SNPs
@@ -423,11 +428,13 @@ y_pred = model.predict(X_disc[:, selected_snps])
 print metrics.explained_variance_score(y_pred, y_disc)
 ```
 99.4% (Your answer may be different because of randomness in the cross-validation procedure.)
-</details>
+
+</p></details>
 
 __Question:__ What percentage of the variance do we explain in the _validation_ set?
 <details>
-<summary>Click to see answer</summary>
+<summary>Click to see answer</summary><p>
+
 Answer:
 ```python
 # Use the model to predict on the validation set
@@ -437,7 +444,8 @@ y_pred = model.predict(X_val[:, selected_snps])
 print metrics.explained_variance_score(y_pred, y_val)
 ```
 89.5% (Your answer may be different because of randomness in the cross-validation procedure.). This is significantly less than on the discovery set.
-</details>
+
+</p></details>
 
 ## Going further
 
