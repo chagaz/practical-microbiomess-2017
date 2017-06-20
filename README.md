@@ -152,6 +152,8 @@ plt.xlabel("SNP", fontsize=14)
 plt.ylabel("-log10 p-value", fontsize=14)
 plt.xlim([0, max(df.BP)])
 
+plt.show()
+
 # If you want to save the figure:
 # plt.savefig('manhattan.png', bbox_inches='tight')
 ```
@@ -252,6 +254,7 @@ plt.scatter(y, y_pred)
 plt.xlabel("True phenotype", fontsize=14)
 plt.ylabel("Predicted phenotype", fontsize=14)
 plt.title("Phenotype predicted from 2 significant SNPs")
+plt.show()
 ```
 
 We can also quantify how well predictions match true values by the __proportion of variance explained__:
@@ -308,6 +311,7 @@ y_pred = model.predict(X[:, selected_snps])
 
 # Plot predictions against true values
 plt.scatter(y, y_pred)
+plt.show()
 
 # Percentage of variance explained
 print metrics.explained_variance_score(y, y_pred)
@@ -349,6 +353,7 @@ print len(selected_snps), "selected SNPs"
 # Plot the coefficients
 plt.scatter(range(lasso_cv.coef_.shape[0]), # x-axis = SNPs
            lasso_cv.coef_)
+plt.show()
 
 # Fit a linear model to the significant SNPs
 model = linear_model.LinearRegression()
