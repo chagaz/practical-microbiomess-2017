@@ -48,8 +48,9 @@ __Question__ How many SNPs passed quality control?
 
 <details>
 <summary>Click to see answer</summary>
-_Answer: 66 536 out of 83 534 (you can get this from the output of the PLINK command, either on screen or in `mydata.log`._
+Answer: 66 536 out of 83 534 (you can get this from the output of the PLINK command, either on screen or in `mydata.log`.
 </details>
+
 
 We have hence created the following `mydata` files:
 * `mydata.bed`, a binary file that contains genotype information;
@@ -289,7 +290,10 @@ With `alpha=0.05`, the Lasso selected 3 SNPs.
 
 __Question:__ What was the significance of each of these 3 SNPs on the Manhattan plot from PLINK?
 
-_Answer: The Lasso built a model with 3 SNPs, two of which were the most significantly associated SNPs by PLINK. The third is not the third-most signficant SNP from the single-SNP analysis!_
+<details>
+<summary>Click to see answer</summary>
+Answer: The Lasso built a model with 3 SNPs, two of which were the most significantly associated SNPs by PLINK. The third is not the third-most signficant SNP from the single-SNP analysis!
+</details>
 
 How well do these three SNPs explain the phenotype?
 
@@ -312,11 +316,17 @@ We now explain 76% of the phenotypic variance with 3 SNPs.
 
 __Question:__ What happens when `alpha=0.1`?
 
-_Answer: We retrieve the linear model with the two most significant SNPs from earlier on._
+<details>
+<summary>Click to see answer</summary>
+Answer: We retrieve the linear model with the two most significant SNPs from earlier on.
+</details>
 
 __Question:__ What happens when `alpha=0.02`?
 
-_Answer: We build a model that includes 6 SNPs and explains 94% of the variance._
+<details>
+<summary>Click to see answer</summary>
+Answer: We build a model that includes 6 SNPs and explains 94% of the variance.
+</details>
 
 #### Cross-validated Lasso
 So, which value of `alpha` should we choose? One way to do this is by _cross-validation_: in a grid of possibilities, we will choose the one that gives the best performing model, in a cross-validation setting.
@@ -350,7 +360,10 @@ print metrics.explained_variance_score(y_pred, y)
 
 __Question:__ What was the optimal value for `alpha`? How does it compare to the other values of `alpha` you have tested? In consequence, were you expecting to select more or fewer SNPs than before?
 
-_Answer: The optimal value for alpha is 0.01. This is less than the values we tried before. With less regularization, the model will be less sparse: more SNPs will be selected. Indeed, we now select 32 SNPs._
+<details>
+<summary>Click to see answer</summary>
+<details>Answer: The optimal value for alpha is 0.01. This is less than the values we tried before. With less regularization, the model will be less sparse: more SNPs will be selected. Indeed, we now select 32 SNPs. (Your answer may be different because of randomness in the cross-validation procedure.)
+</details>
 
 #### Overfitting
 Wow! We're explaining almost all the phenotypic variance with only 32 SNPs! But could this be due to _overfitting_? We are evaluating our linear regression model on exactly the same data we used to build it. Would it really work that well on individuals we have not seen? To test for this, we will repeat the above experiments using only two thirds of our cohort for _discovery_ and the remaining third for _validation_.
@@ -372,25 +385,33 @@ lasso_cv.fit(X_disc, y_disc)
 
 __Question:__ What is now the optimized alpha value?
 
-_Answer:_
+<details>
+<summary>Click to see answer</summary>
+Answer:
 ```python
 print "Optimal alpha:", lasso_cv.alpha_
 ```
-_alpha=0.02. (Your answer may be different because of randomness in the cross-validation procedure.)_
+alpha=0.02. (Your answer may be different because of randomness in the cross-validation procedure.)
+</details>
 
 __Question:__ How many SNPs have we selected?
 
-_Answer:_
+<details>
+<summary>Click to see answer</summary>
+Answer:
 ```python
 # Indices of the SNPs with non-zero coefficients
 selected_snps = np.where(lasso_cv.coef_)[0]
 # See how many SNPs have a non-zero coefficient
 print len(selected_snps), "selected SNPs"
 ```
-_18 SNPs. (Your answer may be different because of randomness in the cross-validation procedure.)_
+18 SNPs. (Your answer may be different because of randomness in the cross-validation procedure.)
+</details>
 
 __Question:__ What percentage of the variance do we explain in the discovery set?
-_Answer:_
+<details>
+<summary>Click to see answer</summary>
+Answer:
 ```python
 # Fit a linear model to the significant SNPs
 model = linear_model.LinearRegression()
@@ -401,10 +422,13 @@ y_pred = model.predict(X_disc[:, selected_snps])
 # Percentage of variance explained
 print metrics.explained_variance_score(y_pred, y_disc)
 ```
-_99.4% (Your answer may be different because of randomness in the cross-validation procedure.)_
+99.4% (Your answer may be different because of randomness in the cross-validation procedure.)
+</details>
 
 __Question:__ What percentage of the variance do we explain in the _validation_ set?
-_Answer:_
+<details>
+<summary>Click to see answer</summary>
+Answer:
 ```python
 # Use the model to predict on the validation set
 y_pred = model.predict(X_val[:, selected_snps])
@@ -412,7 +436,8 @@ y_pred = model.predict(X_val[:, selected_snps])
 # Percentage of variance explained
 print metrics.explained_variance_score(y_pred, y_val)
 ```
-_89.5% (Your answer may be different because of randomness in the cross-validation procedure.). This is significantly less than on the discovery set._
+89.5% (Your answer may be different because of randomness in the cross-validation procedure.). This is significantly less than on the discovery set.
+</details>
 
 ## Going further
 
