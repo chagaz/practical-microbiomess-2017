@@ -221,7 +221,7 @@ We will be working with the `scikit-learn` machine learning suite for Python. Th
 import numpy as np
 import pandas as pd
 # Read the data file in a pandas data frame:
-df = pd.read_csv('data/mydata1.raw',
+df = pd.read_csv('mydata1.raw',
                   delim_whitespace=True)
 
 # Build X from the values of df, excluding its first 6  columns.
