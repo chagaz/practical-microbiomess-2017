@@ -289,7 +289,7 @@ from sklearn import metrics
 print metrics.explained_variance_score(y, y_pred)
 ```
 
-In this simulation, the two most significant SNPs explain about 57% of the phentoypic variance. To put this in perspective, the SNPs that have been associated with human height explain only about 5% of the phenotypic variance — although we known about 80% of height is inherited. This is typical of the _missing heritability_ problem.
+In this simulation, the two most significant SNPs explain about 76% of the phentoypic variance. To put this in perspective, the SNPs that have been associated with human height explain only about 5% of the phenotypic variance — although we known about 80% of height is inherited. This is typical of the _missing heritability_ problem.
 
 We are now going to try to identify more SNPs to explain heritability.
 
@@ -315,6 +315,7 @@ print len(selected_snps), "selected SNPs"
 plt.scatter(range(lasso.coef_.shape[0]), # x-axis = SNPs
             lasso.coef_, # y-axis = SNP weight
             )
+plt.show(block=False)
 ```
 With `alpha=0.05`, the Lasso selected 3 SNPs.
 
@@ -343,7 +344,7 @@ plt.show(block=False)
 print metrics.explained_variance_score(y, y_pred)
 ```
 
-We now explain 76% of the phenotypic variance with 3 SNPs.
+We now explain 97% of the phenotypic variance with 3 SNPs!
 
 __Question:__ What happens when `alpha=0.1`?
 
@@ -356,7 +357,7 @@ __Question:__ What happens when `alpha=0.02`?
 
 <details>
 <summary>Click to see answer</summary>
-Answer: We build a model that includes 6 SNPs and explains 94% of the variance.
+Answer: We build a model that includes 6 SNPs and explains 98% of the variance.
 </details>
 
 #### Cross-validated Lasso
