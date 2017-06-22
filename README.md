@@ -14,6 +14,7 @@ One of the most well-known pieces of software for analyzing GWAS data is [PLINK]
 Download the data using
 ```sh
 wget https://cloud.mines-paristech.fr/index.php/s/JsvnLDf879791f6/download
+mv download simulated-gwas.tar.gz
 tar zxvf simulated-gwas.tar.gz
 ```
 Alternatively, `simulated-gwas.tar.gz` is also part of this github project.
@@ -70,7 +71,7 @@ This creates a file called `assoc1.qassoc` (the `q` stands for "quantitative").
 
 You can have a look at the contents of this file using
 ```sh
-more assoc1.assoc
+more assoc1.qassoc
 ```
 
 The results look like:
@@ -105,7 +106,7 @@ We're going to use a Python package called `pandas` to manipulate data. Pandas m
 # Load the pandas package
 import pandas as pd
 # Load the output of PLINK as a pandas dataframe called df
-df = pd.read_csv('data/assoc1.qassoc', # File name
+df = pd.read_csv('assoc1.qassoc', # File name
                  delim_whitespace=True) # Use any white space as delimiter
 ```
 
@@ -130,13 +131,13 @@ from matplotlib import pyplot as plt
 # false positive probability
 r = 0.01
 # create a vector of 50 values, equally spaced between 1 and 500
-x = np.linalg(1, 500, 50)
+x = np.arange(1, 500, 50)
 # create a vector of (1- (1-r)**p) for all values of p stored in x
 y = (1- (1-r)**x)
 # plot y against x
 plt.plot(x, y)
 # visualize the plot
-plt.show()
+plt.show(block=False)
 ```
 
 To compensate for this, we can use the __Bonferroni correction__, and divide the significance threshold (0.05) by the number of statistical tests we have run, that is to say, the number of SNPs.
@@ -172,10 +173,15 @@ plt.xlabel("SNP", fontsize=14)
 plt.ylabel("-log10 p-value", fontsize=14)
 plt.xlim([0, max(df.BP)])
 
-plt.show()
+plt.show(block=False)
 
 # If you want to save the figure:
 # plt.savefig('manhattan.png', bbox_inches='tight')
+```
+
+```python
+sig_SNPs = df.SNP[df.P < 0.05 / df.shape[0]]
+print sig_SNPs
 ```
 
 #### Q-Q plot
@@ -184,8 +190,8 @@ Quantile-quantile (Q-Q) plots allow us to visualize the distribution of p-values
 Let us plot a Q-Q plot in Python:
 ```python
 import scipy.stats as ss
-ss.probplot(df.P, dist="uniform", plot=pylab)
-plt.show()
+ss.probplot(df.P, dist="uniform", plot=plt)
+plt.show(block=False)
 ```
 
 Our Q-Q plot perfectly matches the diagonal line. This means there is no deviation from the uniform distribution, and very little chance for population structure confounding.
@@ -221,7 +227,7 @@ We will be working with the `scikit-learn` machine learning suite for Python. Th
 import numpy as np
 import pandas as pd
 # Read the data file in a pandas data frame:
-df = pd.read_csv('data/mydata1.raw',
+df = pd.read_csv('mydata1.raw',
                   delim_whitespace=True)
 
 # Build X from the values of df, excluding its first 6  columns.
@@ -274,7 +280,7 @@ plt.scatter(y, y_pred)
 plt.xlabel("True phenotype", fontsize=14)
 plt.ylabel("Predicted phenotype", fontsize=14)
 plt.title("Phenotype predicted from 2 significant SNPs")
-plt.show()
+plt.show(block=False)
 ```
 
 We can also quantify how well predictions match true values by the __proportion of variance explained__:
@@ -283,7 +289,7 @@ from sklearn import metrics
 print metrics.explained_variance_score(y, y_pred)
 ```
 
-In this simulation, the two most significant SNPs explain about 57% of the phentoypic variance. To put this in perspective, the SNPs that have been associated with human height explain only about 5% of the phenotypic variance — although we known about 80% of height is inherited. This is typical of the _missing heritability_ problem.
+In this simulation, the two most significant SNPs explain about 76% of the phentoypic variance. To put this in perspective, the SNPs that have been associated with human height explain only about 5% of the phenotypic variance — although we known about 80% of height is inherited. This is typical of the _missing heritability_ problem.
 
 We are now going to try to identify more SNPs to explain heritability.
 
@@ -309,6 +315,7 @@ print len(selected_snps), "selected SNPs"
 plt.scatter(range(lasso.coef_.shape[0]), # x-axis = SNPs
             lasso.coef_, # y-axis = SNP weight
             )
+plt.show(block=False)
 ```
 With `alpha=0.05`, the Lasso selected 3 SNPs.
 
@@ -331,13 +338,13 @@ y_pred = model.predict(X[:, selected_snps])
 
 # Plot predictions against true values
 plt.scatter(y, y_pred)
-plt.show()
+plt.show(block=False)
 
 # Percentage of variance explained
 print metrics.explained_variance_score(y, y_pred)
 ```
 
-We now explain 76% of the phenotypic variance with 3 SNPs.
+We now explain 97% of the phenotypic variance with 3 SNPs!
 
 __Question:__ What happens when `alpha=0.1`?
 
@@ -350,7 +357,7 @@ __Question:__ What happens when `alpha=0.02`?
 
 <details>
 <summary>Click to see answer</summary>
-Answer: We build a model that includes 6 SNPs and explains 94% of the variance.
+Answer: We build a model that includes 6 SNPs and explains 98% of the variance.
 </details>
 
 #### Cross-validated Lasso
@@ -373,7 +380,7 @@ print len(selected_snps), "selected SNPs"
 # Plot the coefficients
 plt.scatter(range(lasso_cv.coef_.shape[0]), # x-axis = SNPs
            lasso_cv.coef_)
-plt.show()
+plt.show(block=False)
 
 # Fit a linear model to the significant SNPs
 model = linear_model.LinearRegression()
