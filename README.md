@@ -105,7 +105,7 @@ We're going to use a Python package called `pandas` to manipulate data. Pandas m
 # Load the pandas package
 import pandas as pd
 # Load the output of PLINK as a pandas dataframe called df
-df = pd.read_csv('data/assoc1.qassoc', # File name
+df = pd.read_csv('assoc1.qassoc', # File name
                  delim_whitespace=True) # Use any white space as delimiter
 ```
 
@@ -184,7 +184,7 @@ Quantile-quantile (Q-Q) plots allow us to visualize the distribution of p-values
 Let us plot a Q-Q plot in Python:
 ```python
 import scipy.stats as ss
-ss.probplot(df.P, dist="uniform", plot=pylab)
+ss.probplot(df.P, dist="uniform", plot=plt)
 plt.show()
 ```
 
