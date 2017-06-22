@@ -70,7 +70,7 @@ This creates a file called `assoc1.qassoc` (the `q` stands for "quantitative").
 
 You can have a look at the contents of this file using
 ```sh
-more assoc1.assoc
+more assoc1.qassoc
 ```
 
 The results look like:
@@ -130,7 +130,7 @@ from matplotlib import pyplot as plt
 # false positive probability
 r = 0.01
 # create a vector of 50 values, equally spaced between 1 and 500
-x = np.linalg(1, 500, 50)
+x = np.arange(1, 500, 50)
 # create a vector of (1- (1-r)**p) for all values of p stored in x
 y = (1- (1-r)**x)
 # plot y against x
