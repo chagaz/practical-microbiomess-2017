@@ -1,5 +1,5 @@
 # practical-microbiomess-2017
-Practical session at the [2017 Microbiome Summer School](http://metagenomic.ca).
+Practical session on efficient biomarker discovery at the [2017 Microbiome Summer School](http://metagenomic.ca).
 
 ## Introduction
 The goal of this practical is to manipulate quantitative GWAS data and start exploring how machine learning algorithms can be used to analyze this data. We will be working with the genotypes of 89 individuals from the [1000 Genomes Project](http://www.internationalgenome.org/data) (Han Chinese and Japanese ancestry), and a simulated quantitative phenotype. This phenotype can be imagined to represent the relative abundance of two microbial species in the gut of the host.
@@ -16,6 +16,8 @@ Download the data using
 wget https://cloud.mines-paristech.fr/index.php/s/JsvnLDf879791f6/download
 tar zxvf simulated-gwas.tar.gz
 ```
+Alternatively, `simulated-gwas.tar.gz` is also part of this github project.
+
 The data is stored in PLINK format (a format that is commonly used to exchange genotype/phenotype data and that most GWAS software can manipulate).
 
 #### File formats
@@ -35,9 +37,9 @@ From this command, PLINK understands it is going to find the genotype data in `s
 #### Quality control
 
 Now we're going to apply __quality control__ filters:
-* SNPs with minor allele frequency (maf) lower than 1% will be removed.
-* SNPs with missing data for more than 10% of individuals will be removed.
-* SNPs that are not in Hardy-Weinberg equilibrium (p-value larger than 1e-6) will be removed.
+* SNPs with __minor allele frequency (MAF)__ lower than 1% will be removed. We focus on common variants for several reasons: the "common disease, common variant" hypothesis; the fact that rare variants are more likely to be technical artifacts; and, last but not least, because we have limited statistical power to detect the effect of rare SNPs.
+* SNPs with __missing data__ for more than 10% of individuals will be removed.
+* SNPs that are not in __Hardy-Weinberg equilibrium (HWE)__ (p-value larger than 1e-6) will be removed: departure from HWE is likely to be due to a genotyping error.
 
 We're also creating a binary ped file, called a `.bed` file, that will take up less space and speed up subsequent analyses.
 ```sh
@@ -119,7 +121,25 @@ df_sorted = df.sort_values('P')
 print df_sorted[:10]
 ```
 
-What is our significance threshold? We need to account for multiple hypothesis testing. If we use the Bonferroni correction, we need to divide the significance threshold (0.05) by the number of statistical tests we have run, that is to say, the number of SNPs.
+What is our significance threshold? We need to account for __multiple hypothesis testing.__ If we call `r` the probability of getting a false positive when running our test, the probability of _not_ getting one is ``(1-r)``. Now if we run p tests, the probability of _not_ getting any false positive is `(1-r)**p`. Therefore the probability of getting at least one false positive is `1 - (1-r)**p`, which grows steadily with p and tends towards 1.
+
+If you're curious, you can plot this function with matplotlib:
+```python
+import numpy as np
+from matplotlib import pyplot as plt
+# false positive probability
+r = 0.01
+# create a vector of 50 values, equally spaced between 1 and 500
+x = np.linalg(1, 500, 50)
+# create a vector of (1- (1-r)**p) for all values of p stored in x
+y = (1- (1-r)**x)
+# plot y against x
+plt.plot(x, y)
+# visualize the plot
+plt.show()
+```
+
+To compensate for this, we can use the __Bonferroni correction__, and divide the significance threshold (0.05) by the number of statistical tests we have run, that is to say, the number of SNPs.
 
 ```python
 # df has as many lines as there are SNPs
@@ -159,7 +179,7 @@ plt.show()
 ```
 
 #### Q-Q plot
-Q-Q plots allow us to visualize the distribution of p-values, and whether it significantly deviates from the uniform. We expect the vast majority of SNPs _not_ to be associated with the phenotype, and hence their p-values to be uniformly distributed. A visible deviation from the uniform usually indicate that the analysis is confounded by population structure.
+Quantile-quantile (Q-Q) plots allow us to visualize the distribution of p-values, and whether it significantly deviates from the uniform. We expect the vast majority of SNPs _not_ to be associated with the phenotype, and hence their p-values to be uniformly distributed. A visible deviation from the uniform usually indicate that the analysis is confounded by population structure.
 
 Let us plot a Q-Q plot in Python:
 ```python
