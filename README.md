@@ -14,6 +14,7 @@ One of the most well-known pieces of software for analyzing GWAS data is [PLINK]
 Download the data using
 ```sh
 wget https://cloud.mines-paristech.fr/index.php/s/JsvnLDf879791f6/download
+mv download simulated-gwas.tar.gz
 tar zxvf simulated-gwas.tar.gz
 ```
 Alternatively, `simulated-gwas.tar.gz` is also part of this github project.
