@@ -136,7 +136,7 @@ y = (1- (1-r)**x)
 # plot y against x
 plt.plot(x, y)
 # visualize the plot
-plt.show()
+plt.show(block=False)
 ```
 
 To compensate for this, we can use the __Bonferroni correction__, and divide the significance threshold (0.05) by the number of statistical tests we have run, that is to say, the number of SNPs.
@@ -172,10 +172,15 @@ plt.xlabel("SNP", fontsize=14)
 plt.ylabel("-log10 p-value", fontsize=14)
 plt.xlim([0, max(df.BP)])
 
-plt.show()
+plt.show(block=False)
 
 # If you want to save the figure:
 # plt.savefig('manhattan.png', bbox_inches='tight')
+```
+
+```python
+sig_SNPs = df.SNP[df.P < 0.05 / df.shape[0]]
+print sig_SNPs
 ```
 
 #### Q-Q plot
@@ -185,7 +190,7 @@ Let us plot a Q-Q plot in Python:
 ```python
 import scipy.stats as ss
 ss.probplot(df.P, dist="uniform", plot=plt)
-plt.show()
+plt.show(block=False)
 ```
 
 Our Q-Q plot perfectly matches the diagonal line. This means there is no deviation from the uniform distribution, and very little chance for population structure confounding.
@@ -274,7 +279,7 @@ plt.scatter(y, y_pred)
 plt.xlabel("True phenotype", fontsize=14)
 plt.ylabel("Predicted phenotype", fontsize=14)
 plt.title("Phenotype predicted from 2 significant SNPs")
-plt.show()
+plt.show(block=False)
 ```
 
 We can also quantify how well predictions match true values by the __proportion of variance explained__:
@@ -331,7 +336,7 @@ y_pred = model.predict(X[:, selected_snps])
 
 # Plot predictions against true values
 plt.scatter(y, y_pred)
-plt.show()
+plt.show(block=False)
 
 # Percentage of variance explained
 print metrics.explained_variance_score(y, y_pred)
@@ -373,7 +378,7 @@ print len(selected_snps), "selected SNPs"
 # Plot the coefficients
 plt.scatter(range(lasso_cv.coef_.shape[0]), # x-axis = SNPs
            lasso_cv.coef_)
-plt.show()
+plt.show(block=False)
 
 # Fit a linear model to the significant SNPs
 model = linear_model.LinearRegression()
