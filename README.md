@@ -11,14 +11,10 @@ One of the most well-known pieces of software for analyzing GWAS data is [PLINK]
 [PLINK 1.9](https://www.cog-genomics.org/plink/1.9/) is currently in beta version.
 
 ### Data loading and pre-processing
-Download the data using
+Uncompress the data using
 ```sh
-wget https://cloud.mines-paristech.fr/index.php/s/JsvnLDf879791f6/download
-mv download simulated-gwas.tar.gz
 tar zxvf simulated-gwas.tar.gz
 ```
-Alternatively, `simulated-gwas.tar.gz` is also part of this github project.
-
 The data is stored in PLINK format (a format that is commonly used to exchange genotype/phenotype data and that most GWAS software can manipulate).
 
 #### File formats
@@ -179,8 +175,9 @@ plt.show(block=False)
 # plt.savefig('manhattan.png', bbox_inches='tight')
 ```
 
+What are the names of our significant SNPs?
 ```python
-sig_SNPs = df.SNP[df.P < 0.05 / df.shape[0]]
+sig_SNPs = df.SNP[df.P < sig_thresh]
 print sig_SNPs
 ```
 
